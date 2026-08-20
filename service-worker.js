@@ -2,7 +2,7 @@
 self.addEventListener("push", event => {
   let data = {};
   try { data = event.data ? event.data.json() : {}; } catch {}
-  const title = data.title || "0 KM 🚐";
+  const title = data.title || "VanLife 🚐 Tínky a Tomíka";
   const options = {
     body: data.body || "Něco se změnilo v našem projektu… ♡",
     icon: "/icons/icon-192.png",
