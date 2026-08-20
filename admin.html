@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f7ecd8">
+  <title>TOMÍK — Editace 0 KM</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="loginGate" class="login-gate">
+    <div class="login-card">
+      <div class="eyebrow">0 KM · SOUKROMÁ SPRÁVA</div>
+      <h1>TOMÍK</h1>
+      <p>Zadej heslo pro editaci projektu.</p>
+      <input id="passwordInput" type="password" placeholder="Heslo">
+      <button id="loginBtn">Odemknout editaci</button>
+      <div id="loginError" class="login-error hidden">Špatné heslo.</div>
+      <a href="index.html">← Zpět na hráčský pohled</a>
+    </div>
+  </div>
+  <div id="adminApp" class="app hidden">
+    <header class="hero">
+      <div class="hero-note">náš<br>van<br>projekt ♡</div>
+      <div class="hero-center">
+        <div class="eyebrow">NÁŠ VAN PROJEKT</div>
+        <h1><span id="heroKm">0</span> KM</h1>
+        <p class="hero-subtitle-cozy">Jednou přestat říkat „jednou“.</p>
+        <div class="hero-stats">
+          <button class="pill" data-jump="stav"><span>📅</span><b id="heroDay">DEN 1</b></button>
+          <button class="pill" data-jump="fond"><span>◉</span><b id="heroFund">0 Kč</b></button>
+          <button class="pill" data-jump="cesta"><span>⌁</span><b id="heroDistance">0 km</b></button>
+        </div>
+      </div>
+      <button id="logoutAdminBtn" class="admin-btn">🔒 ZAMKNOUT</button>
+    </header>
+<div id="globalHomeRule" class="global-home-rule hidden"></div>
+    <div class="edit-ribbon">
+      <div><b>TOMÍK — EDITAČNÍ REŽIM</b><span>Tohle je stejná stránka jako hráčský pohled, jen s možností upravovat obsah přímo na místě.</span></div>
+
+<section class="notify-tinka-panel">
+  <div class="notify-tinka-copy">
+    <div class="eyebrow">UPOZORNĚNÍ</div>
+    <h2>Chceš Tínku zavolat zpátky do 0 KM?</h2>
+    <p>Tohle tlačítko je úplně oddělené od ukládání. Použiješ ho jen tehdy, když jí chceš poslat herní upozornění.</p>
+  </div>
+  <button id="notifyTinkaBtn" class="notify-tinka-btn">🔔 UPOZORNIT TÍNKU</button>
+</section>
+
+<div id="notifyTinkaModal" class="notify-tinka-modal hidden">
+  <div class="notify-tinka-sheet">
+    <button id="closeNotifyTinka" class="notify-tinka-close" aria-label="Zavřít">×</button>
+    <div class="notify-tinka-icon">🔔</div>
+    <div class="eyebrow">UPOZORNIT TÍNKU</div>
+    <h3>Co jí má přijít?</h3>
+
+    <div class="notify-presets">
+      <button data-notify-text="Něco se změnilo v našem projektu… ♡">Něco se změnilo…</button>
+      <button data-notify-text="Na naší cestě přibyla nová stopa. 🚐">Nová stopa</button>
+      <button data-notify-text="Podívej se do 0 KM. Něco tam na tebe čeká. ♡">Něco na tebe čeká</button>
+    </div>
+
+    <label class="notify-custom-label">
+      Vlastní text
+      <textarea id="notifyTinkaText" maxlength="140" placeholder="Napiš krátké upozornění…">Něco se změnilo v našem projektu… ♡</textarea>
+    </label>
+
+    <button id="sendNotifyTinkaBtn" class="notify-tinka-send">🔔 ODESLAT UPOZORNĚNÍ</button>
+    <div id="notifyTinkaStatus" class="notify-tinka-status"></div>
+  </div>
+</div>
+
+      <button id="previewPublicBtn">Otevřít hráčský pohled</button>
+    </div>
+
+    <main class="content editable">
+      <section id="fond" class="card fond-card">
+        <div class="card-title">
+          <div>
+            <div class="eyebrow">POSTUP</div>
+            <h2>Fond na van</h2>
+          </div>
+          <span class="badge" id="fundBadge">0 Kč</span>
+        </div>
+
+        <div class="inline-edit">
+  <label>Fond <input id="editFund" type="number" min="0" step="100"></label>
+  <label>Den <input id="editDay" type="number" min="1"></label>
+  <label>Km <input id="editDistance" type="number" min="0"></label>
+  <button id="saveBasicInline">Uložit</button>
+</div>
+<div class="fund-number" id="fundNumber">0 Kč</div>
+        <div class="fund-target" id="fundTarget">z cíle 20 000 Kč</div>
+
+        <div class="progress-wrap">
+          <div class="progress"><div id="fundProgress" class="progress-fill"></div></div>
+          <div id="vanMarker" class="van-marker">🚐</div>
+        </div>
+
+        <div id="milestones" class="milestones"></div>
+      </section>
+
+      <section class="card plan-card">
+        <div class="card-title">
+          <div>
+            <div class="eyebrow">UŽ ROZHODNUTO</div>
+            <h2>Náš plán</h2>
+          </div>
+          <span class="badge">40 / 25 / 35</span>
+        </div>
+
+        <div class="budget-list">
+          <div class="budget-row">
+            <span>Van</span>
+            <div class="budget-track"><i style="width:40%"></i></div>
+            <b>40 %</b>
+          </div>
+          <div class="budget-row build">
+            <span>Přestavba</span>
+            <div class="budget-track"><i style="width:25%"></i></div>
+            <b>25 %</b>
+          </div>
+          <div class="budget-row road">
+            <span>Cesta</span>
+            <div class="budget-track"><i style="width:35%"></i></div>
+            <b>35 %</b>
+          </div>
+        </div>
+
+        <div class="inline-edit two">
+  <input id="editPriority1" placeholder="Priorita 1">
+  <input id="editPriority2" placeholder="Priorita 2">
+  <button id="savePrioritiesInline">Uložit priority</button>
+</div>
+<div class="paper-note">
+          <strong>Co je pro nás důležité?</strong>
+          <div id="priorities">Zatím nevyplněno.</div>
+        </div>
+      </section>
+
+      <section class="card hunt-card">
+        <div class="card-title">
+          <div>
+            <div class="eyebrow">HLEDÁME</div>
+            <h2>Hledání vanu</h2>
+          </div>
+          <span class="badge" id="activeCount">0</span>
+        </div>
+
+        <div class="inline-edit candidate-maker">
+  <input id="newCandidateName" placeholder="#001 / Bílá">
+  <input id="newCandidateYear" placeholder="2011">
+  <input id="newCandidateKm" placeholder="182 000 km">
+  <input id="newCandidatePrice" placeholder="89 000 Kč">
+  <input id="newCandidateNote" placeholder="Poznámka">
+  <select id="newCandidateStatus">
+    <option value="active">Aktivní</option>
+    <option value="rejected">Odmítnutý</option>
+  </select>
+  <button id="addCandidateInline">Přidat kandidáta</button>
+</div>
+<div id="activeCandidates" class="candidate-list"></div>
+        <div class="viewer-note">Klikni na kandidáta níže pro úpravu nebo smazání.</div>
+      </section>
+
+      <section class="right-stack">
+        <article class="card rejected-card">
+          <div class="card-title">
+            <div>
+              <div class="eyebrow">NEPROŠLO</div>
+              <h2>Odmítnuté vany</h2>
+            </div>
+            <span class="badge danger" id="rejectedCount">0</span>
+          </div>
+          <div id="rejectedCandidates" class="candidate-list compact"></div>
+        </article>
+
+        <article class="card lessons-card">
+          <div class="card-title">
+            <div>
+              <div class="eyebrow">ZKUŠENOSTI</div>
+              <h2>Co už víme</h2>
+            </div>
+          </div>
+          <div class="inline-edit">
+  <input id="newLesson" placeholder="Nová lekce">
+  <button id="addLessonInline">Přidat lekci</button>
+</div>
+<div id="lessons" class="lesson-list"></div>
+        </article>
+      </section>
+
+      
+<div class="inline-edit van-admin-identity">
+  <div class="admin-inline-title">IDENTITA VANU</div>
+  <label>Jméno vanu
+    <input id="adminVanName" maxlength="30" placeholder="Jméno, které vybrala Tína">
+  </label>
+  <label>Fotografie vanu
+    <input id="adminVanPhotoFile" type="file" accept="image/*">
+  </label>
+  <div id="adminVanPhotoPreviewWrap" class="admin-van-photo-preview hidden">
+    <img loading="lazy" decoding="async" id="adminVanPhotoPreview" alt="Náhled vanu">
+  </div>
+  <button id="saveVanIdentityAdmin">Uložit jméno / fotografii</button>
+  <button id="clearVanPhotoAdmin" class="subtle-admin-btn">Odstranit fotografii</button>
+</div>
+<div class="stage-edit-controls">
+  <b>Odemknout kapitoly:</b>
+  <label><input id="toggleVan" type="checkbox"> Náš van</label>
+  <label><input id="toggleBuild" type="checkbox"> Přestavba</label>
+  <label><input id="toggleHome" type="checkbox"> Náš domov</label>
+  <label><input id="toggleRoad" type="checkbox"> Cesta</label>
+  <button id="saveStageInline">Uložit odemčení</button>
+</div>
+<section class="stage-grid" id="stav">
+        <button class="stage-card locked" id="stageVan" data-stage="van">
+          <div class="chapter-no">KAPITOLA I</div><div class="stage-art">🚐</div>
+          <h3>Náš van</h3><p>Najít ten pravý.</p><span class="lock">🔒 Zamčeno</span>
+        </button>
+        <button class="stage-card locked" id="stageBuild" data-stage="build">
+          <div class="chapter-no">KAPITOLA II</div><div class="stage-art">🛠</div>
+          <h3>Přestavba</h3><p>Proměnit ho v domov.</p><span class="lock">🔒 Zamčeno</span>
+        </button>
+        <button class="stage-card locked" id="stageHome" data-stage="home">
+          <div class="chapter-no">KAPITOLA III</div><div class="stage-art">🪴</div>
+          <h3>Náš domov</h3><p>Domov je tam, kde zaparkujeme.</p><span class="lock">🔒 Zamčeno</span>
+        </button>
+        <button class="stage-card locked" id="stageRoad" data-stage="road">
+          <div class="chapter-no">KAPITOLA IV</div><div class="stage-art">🗺</div>
+          <h3>Cesta</h3><p>Velké dobrodružství začíná.</p><span class="lock">🔒 Zamčeno</span>
+        </button>
+      </section>
+
+      <section id="chapterContent" class="chapter-content hidden">
+        <button class="chapter-close" id="chapterClose">×</button>
+        <div id="chapterInner"></div>
+      </section>
+
+      <section id="cesta" class="journey-card">
+        <div class="journey-note" id="journeyNote">dnes:<br><b>malé kroky,<br>velké sny ♡</b></div>
+        <div class="journey">
+          <div class="journey-step active" id="journeyStart"><span>⚑</span><b>Start</b><em></em></div>
+          <i class="journey-link" id="linkStartVan"></i>
+          <div class="journey-step" id="journeyVan"><span>🚐</span><b>Náš van</b><em></em></div>
+          <i class="journey-link" id="linkVanBuild"></i>
+          <div class="journey-step" id="journeyBuild"><span>🛠</span><b>Přestavba</b><em></em></div>
+          <i class="journey-link" id="linkBuildHome"></i>
+          <div class="journey-step" id="journeyHome"><span>⌂</span><b>Náš domov</b><em></em></div>
+          <i class="journey-link" id="linkHomeRoad"></i>
+          <div class="journey-step" id="journeyRoad"><span>△</span><b>Cesta</b><em></em></div>
+        </div>
+      </section>
+    
+      <section class="reset-panel">
+        <div>
+          <div class="eyebrow">TESTOVÁNÍ</div>
+          <h2>Resetovat celý projekt</h2>
+          <p>Vrátí hru úplně na začátek. Všechny kapitoly se zamknou a smažou se testovací data.</p>
+        </div>
+        <button id="fullResetBtn" class="full-reset-btn">Resetovat 0 KM</button>
+      </section>
+<div class="inline-edit road-admin-panel"><div class="admin-inline-title">ZKUŠEBNÍ CESTA • iMESSAGE → WEB</div><label>Den<input id="tripDayAdmin" type="number" min="1" max="3" value="1"></label><label>Aktuální místo<input id="tripLocationAdmin" type="text" placeholder="např. Šumava"></label><label>Kilometry<input id="tripKmAdmin" type="number" min="0" placeholder="0"></label><button id="saveTripStatusAdmin">Uložit stav cesty</button><label class="trip-admin-wide">Název zápisu<input id="tripLogTitleAdmin" type="text" placeholder="např. První změna plánu"></label><label class="trip-admin-wide">Co se odehrálo v iMessage<textarea id="tripLogTextAdmin" placeholder="Krátký zápis toho, co už jste odehráli…"></textarea></label><button id="addTripLogAdmin">+ Přidat do deníku</button></div></main>
+  </div>
+
+  <div id="unlockModal" class="unlock-modal hidden" style="display:none">
+    <div class="unlock-scene">
+      <button id="closeUnlockBtn" class="unlock-close" aria-label="Zavřít">×</button>
+      <div class="unlock-stars">✦　·　✧　·　✦</div>
+      <div class="unlock-kicker">NOVÁ KAPITOLA</div>
+      <div id="unlockArt" class="unlock-art">🚐</div>
+      <h2 id="unlockTitle">MÁME VAN.</h2>
+      <p id="unlockText">Některé sny přestanou být sny úplně nenápadně.</p>
+      <button id="revealChapterBtn">Odemknout kapitolu →</button>
+    </div>
+  </div>
+
+  </div>
+  <script src="admin-inline.js"></script>
+</body>
+</html>

@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f7ecd8">
+  <title>0 KM — Náš projekt vanu</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#c79a67">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="0 KM">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+</head>
+<body>
+  <div class="app">
+    <header class="hero">
+      <div class="hero-note">náš<br>van<br>projekt ♡</div>
+      <div class="hero-center">
+        <div class="eyebrow">NÁŠ VAN PROJEKT</div>
+        <h1><span id="heroKm">0</span> KM</h1>
+        <p class="hero-subtitle-cozy">Jednou přestat říkat „jednou“.</p>
+        <div class="hero-stats">
+          <button class="pill" data-jump="stav"><span>📅</span><b id="heroDay">DEN 1</b></button>
+          <button class="pill" data-jump="fond"><span>◉</span><b id="heroFund">0 Kč</b></button>
+          <button class="pill" data-jump="cesta"><span>⌁</span><b id="heroDistance">0 km</b></button>
+        </div>
+      </div>
+      <a id="tomikAdminLink" class="admin-btn" href="admin.html" aria-label="Otevřít TOMÍK režim">🔒 TOMÍK</a>
+    </header>
+
+<div id="pushOptIn" class="push-optin hidden">
+  <div class="push-optin-icon">🔔</div>
+  <div class="push-optin-copy">
+    <small>0 KM NA IPHONU</small>
+    <b>Chceš vědět, když se něco změní?</b>
+    <p id="pushOptInText">Povol upozornění a 0 KM se může ozvat, i když ho zrovna nemáš otevřené.</p>
+  </div>
+  <button id="enablePushBtn">Zapnout upozornění ♡</button>
+</div>
+
+<div id="globalHomeRule" class="global-home-rule hidden"></div>
+
+    <main class="content">
+      <section id="fond" class="card fond-card">
+        <div class="card-title">
+          <div>
+            <div class="eyebrow">POSTUP</div>
+            <h2>Fond na van</h2>
+          </div>
+          <span class="badge" id="fundBadge">0 Kč</span>
+        </div>
+
+        <div class="fund-number" id="fundNumber">0 Kč</div>
+        <div class="fund-target" id="fundTarget">z cíle 20 000 Kč</div>
+
+        <div class="progress-wrap">
+          <div class="progress"><div id="fundProgress" class="progress-fill"></div></div>
+          <div id="vanMarker" class="van-marker">🚐</div>
+        </div>
+
+        <div id="milestones" class="milestones"></div>
+      </section>
+
+      <section class="card plan-card">
+        <div class="card-title">
+          <div>
+            <div class="eyebrow">UŽ ROZHODNUTO</div>
+            <h2>Náš plán</h2>
+          </div>
+          <span class="badge">40 / 25 / 35</span>
+        </div>
+
+        <div class="budget-list">
+          <div class="budget-row">
+            <span>Van</span>
+            <div class="budget-track"><i style="width:40%"></i></div>
+            <b>40 %</b>
+          </div>
+          <div class="budget-row build">
+            <span>Přestavba</span>
+            <div class="budget-track"><i style="width:25%"></i></div>
+            <b>25 %</b>
+          </div>
+          <div class="budget-row road">
+            <span>Cesta</span>
+            <div class="budget-track"><i style="width:35%"></i></div>
+            <b>35 %</b>
+          </div>
+        </div>
+
+        <div class="paper-note">
+          <strong>Co je pro nás důležité?</strong>
+          <div id="priorities">Zatím nevyplněno.</div>
+        </div>
+      </section>
+
+      <section class="card hunt-card">
+        <div class="card-title">
+          <div>
+            <div class="eyebrow">HLEDÁME</div>
+            <h2>Hledání vanu</h2>
+          </div>
+          <span class="badge" id="activeCount">0</span>
+        </div>
+
+        <div id="activeCandidates" class="candidate-list"></div>
+        <div class="viewer-note">Nové kandidáty přidává Tomík ve správě projektu.</div>
+      </section>
+
+      <section class="right-stack">
+        <article class="card rejected-card">
+          <div class="card-title">
+            <div>
+              <div class="eyebrow">NEPROŠLO</div>
+              <h2>Odmítnuté vany</h2>
+            </div>
+            <span class="badge danger" id="rejectedCount">0</span>
+          </div>
+          <div id="rejectedCandidates" class="candidate-list compact"></div>
+        </article>
+
+        <article class="card lessons-card">
+          <div class="card-title">
+            <div>
+              <div class="eyebrow">ZKUŠENOSTI</div>
+              <h2>Co už víme</h2>
+            </div>
+          </div>
+          <div id="lessons" class="lesson-list"></div>
+        </article>
+      </section>
+
+      <section class="stage-grid" id="stav">
+        <button class="stage-card locked" id="stageVan" data-stage="van">
+          <div class="chapter-no">KAPITOLA I</div><div class="stage-art">🚐</div>
+          <h3>Náš van</h3><p>Najít ten pravý.</p><span class="lock">🔒 Zamčeno</span>
+        </button>
+        <button class="stage-card locked" id="stageBuild" data-stage="build">
+          <div class="chapter-no">KAPITOLA II</div><div class="stage-art">🛠</div>
+          <h3>Přestavba</h3><p>Proměnit ho v domov.</p><span class="lock">🔒 Zamčeno</span>
+        </button>
+        <button class="stage-card locked" id="stageHome" data-stage="home">
+          <div class="chapter-no">KAPITOLA III</div><div class="stage-art">🪴</div>
+          <h3>Náš domov</h3><p>Domov je tam, kde zaparkujeme.</p><span class="lock">🔒 Zamčeno</span>
+        </button>
+        <button class="stage-card locked" id="stageRoad" data-stage="road">
+          <div class="chapter-no">KAPITOLA IV</div><div class="stage-art">🗺</div>
+          <h3>Cesta</h3><p>Velké dobrodružství začíná.</p><span class="lock">🔒 Zamčeno</span>
+        </button>
+      </section>
+
+      <section id="chapterContent" class="chapter-content hidden">
+        <button class="chapter-close" id="chapterClose">×</button>
+        <div id="chapterInner"></div>
+      </section>
+
+      <section id="cesta" class="journey-card">
+        <div class="journey-note" id="journeyNote">dnes:<br><b>malé kroky,<br>velké sny ♡</b></div>
+        <div class="journey">
+          <div class="journey-step active" id="journeyStart"><span>⚑</span><b>Start</b><em></em></div>
+          <i class="journey-link" id="linkStartVan"></i>
+          <div class="journey-step" id="journeyVan"><span>🚐</span><b>Náš van</b><em></em></div>
+          <i class="journey-link" id="linkVanBuild"></i>
+          <div class="journey-step" id="journeyBuild"><span>🛠</span><b>Přestavba</b><em></em></div>
+          <i class="journey-link" id="linkBuildHome"></i>
+          <div class="journey-step" id="journeyHome"><span>⌂</span><b>Náš domov</b><em></em></div>
+          <i class="journey-link" id="linkHomeRoad"></i>
+          <div class="journey-step" id="journeyRoad"><span>△</span><b>Cesta</b><em></em></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  
+  
+<div id="letterSealModal" class="letter-seal-modal hidden">
+  <div class="letter-seal-scene">
+    <div class="letter-seal-kicker">PRO NÁS, AŽ TO BUDE SKUTEČNÉ</div>
+
+    <div class="letter-envelope-wrap">
+      <div class="letter-paper" id="letterPaper">
+        <div class="letter-paper-lines"></div>
+        <div class="letter-paper-heart">♡</div>
+      </div>
+
+      <div class="letter-envelope">
+        <div class="letter-envelope-back"></div>
+        <div class="letter-envelope-front"></div>
+        <div class="letter-envelope-flap"></div>
+        <div class="wax-seal">
+          <span>♡</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="letter-seal-copy">
+      <h2>Vzkaz je zalepený.</h2>
+      <p>Už ho nebudeme otevírat. Počká na den, kdy to přestane být jen hra.</p>
+      <button id="finishLetterSealBtn">Uložit pro jednou ♡</button>
+    </div>
+  </div>
+</div>
+
+<div id="vanIdentityModal" class="van-identity-modal hidden">
+    <div class="van-identity-card">
+      <div class="smoke smoke-a"></div>
+      <div class="smoke smoke-b"></div>
+      <div class="smoke smoke-c"></div>
+      <button id="closeVanIdentityBtn" class="van-identity-close" aria-label="Zavřít">×</button>
+
+      <div class="van-reveal-kicker">TEĎ UŽ JE OPRAVDU NÁŠ</div>
+      <div class="van-photo-frame">
+        <img loading="lazy" decoding="async" id="vanRevealPhoto" alt="Náš van">
+        <div id="vanPhotoPlaceholder" class="van-photo-placeholder">🚐</div>
+      </div>
+      <div class="van-reveal-label">SEZNAMTE SE</div>
+      <h2 id="vanRevealName">Náš van</h2>
+      <p>Od téhle chvíle už to není jen dodávka.</p>
+      <button id="finishVanRevealBtn">Tohle je náš domov ♡</button>
+    </div>
+  </div>
+
+<div id="unlockModal" class="unlock-modal hidden">
+    <div class="unlock-scene">
+      <button id="closeUnlockBtn" class="unlock-close" aria-label="Zavřít">×</button>
+      <div class="unlock-stars">✦　·　✧　·　✦</div>
+      <div class="unlock-kicker">NOVÁ KAPITOLA</div>
+      <div id="unlockArt" class="unlock-art">🚐</div>
+      <h2 id="unlockTitle">MÁME VAN.</h2>
+      <p id="unlockText">Některé sny přestanou být sny úplně nenápadně.</p>
+      <button id="revealChapterBtn">Odemknout kapitolu →</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
