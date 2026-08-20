@@ -52,7 +52,7 @@ function save(){
   }
 }
 function esc(v=""){return String(v).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
-function candidate(c){return `<article class="candidate"><div class="candidate-thumb">🚐</div><div><h4>${esc(c.name||"Van")}</h4><p>${esc(c.year||"—")} · ${esc(c.km||"—")}</p><strong>${esc(c.price||"—")}</strong><span class="candidate-note">${esc(c.note||"čeká na prověření")}</span></div></article>`}
+function candidate(c){return `<article class="candidate"><div class="candidate-thumb">${c.photo?`<img src="${c.photo}" alt="${esc(c.name||"Van")}">`:"🚐"}</div><div><h4>${esc(c.name||"Van")}</h4><p>${esc(c.year||"—")} · ${esc(c.km||"—")}</p><strong>${esc(c.price||"—")}</strong><span class="candidate-note">${esc(c.note||"čeká na prověření")}</span></div></article>`}
 function stage(a,b,on){const e=$(a),j=$(b);if(!e||!j)return;e.classList.toggle("locked",!on);e.classList.toggle("unlocked",!!on);e.querySelector(".lock").textContent=on?"✓ KAPITOLA ODEMČENA":"🔒 Zamčeno";j.classList.toggle("active",!!on)}
 function renderJourney(){
  const van=$("journeyVan"),build=$("journeyBuild"),home=$("journeyHome"),road=$("journeyRoad"),note=$("journeyNote");

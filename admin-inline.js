@@ -5,13 +5,33 @@ const $=id=>document.getElementById(id),money=n=>new Intl.NumberFormat("cs-CZ").
 let state=load();
 function load(){try{const r=JSON.parse(localStorage.getItem(STORAGE_KEY))||{};return {...structuredClone(initialState),...r,unlocks:{...initialState.unlocks,...(r.unlocks||{})},revealed:{...initialState.revealed,...(r.revealed||{})},revealQueue:Array.isArray(r.revealQueue)?r.revealQueue:[]}}catch{return structuredClone(initialState)}}
 function persist(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state));render()}
+function compressAdminImage(file,maxSide=760,quality=.68){
+ return new Promise((resolve,reject)=>{
+  const reader=new FileReader();
+  reader.onerror=reject;
+  reader.onload=()=>{
+   const img=new Image();
+   img.onerror=reject;
+   img.onload=()=>{
+    let w=img.width,h=img.height;
+    const scale=Math.min(1,maxSide/Math.max(w,h));
+    w=Math.round(w*scale);h=Math.round(h*scale);
+    const canvas=document.createElement("canvas");canvas.width=w;canvas.height=h;
+    canvas.getContext("2d").drawImage(img,0,0,w,h);
+    resolve(canvas.toDataURL("image/jpeg",quality));
+   };
+   img.src=reader.result;
+  };
+  reader.readAsDataURL(file);
+ });
+}
 function esc(v=""){return String(v).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
 function login(){if($("passwordInput").value===ADMIN_PASSWORD){sessionStorage.setItem(SESSION_KEY,"1");$("loginGate").classList.add("hidden");$("adminApp").classList.remove("hidden");render()}else $("loginError").classList.remove("hidden")}
 $("loginBtn")?.addEventListener("click",login);$("passwordInput")?.addEventListener("keydown",e=>{if(e.key==="Enter")login()});
 $("logoutAdminBtn")?.addEventListener("click",()=>{sessionStorage.removeItem(SESSION_KEY);$("adminApp").classList.add("hidden");$("loginGate").classList.remove("hidden")});
 $("previewPublicBtn")?.addEventListener("click",()=>window.open("index.html","_blank"));
 if(sessionStorage.getItem(SESSION_KEY)==="1"){$("loginGate").classList.add("hidden");$("adminApp").classList.remove("hidden")}
-function cand(c,i){return `<article class="candidate"><div class="candidate-thumb">🚐</div><div><h4>${esc(c.name||"Van")}</h4><p>${esc(c.year||"—")} · ${esc(c.km||"—")}</p><strong>${esc(c.price||"—")}</strong><span class="candidate-note">${esc(c.note||"čeká na prověření")}</span><div class="edit-controls"><button data-edit="${i}">Upravit</button><button data-toggle="${i}">${c.status==="active"?"Odmítnout":"Vrátit"}</button><button class="delete" data-delete="${i}">Smazat</button></div></div></article>`}
+function cand(c,i){return `<article class="candidate"><div class="candidate-thumb">${c.photo?`<img src="${c.photo}" alt="${esc(c.name||"Van")}">`:"🚐"}</div><div><h4>${esc(c.name||"Van")}</h4><p>${esc(c.year||"—")} · ${esc(c.km||"—")}</p><strong>${esc(c.price||"—")}</strong><span class="candidate-note">${esc(c.note||"čeká na prověření")}</span><div class="edit-controls"><button data-edit="${i}">Upravit</button><button data-toggle="${i}">${c.status==="active"?"Odmítnout":"Vrátit"}</button><button class="delete" data-delete="${i}">Smazat</button></div></div></article>`}
 function stage(a,b,on){const e=$(a),j=$(b);e.classList.toggle("locked",!on);e.classList.toggle("unlocked",!!on);e.querySelector(".lock").textContent=on?"✓ KAPITOLA ODEMČENA":"🔒 Zamčeno";j.classList.toggle("active",!!on)}
 function render(){
  $("heroDay").textContent="DEN "+(state.day||1);$("heroFund").textContent=money(state.fund);$("heroDistance").textContent=(state.distance||0)+" km";$("fundBadge").textContent=money(state.fund);$("fundNumber").textContent=money(state.fund);
@@ -44,7 +64,36 @@ function wire(){
 }
 $("saveBasicInline")?.addEventListener("click",()=>{state.fund=+$("editFund").value||0;state.day=+$("editDay").value||1;state.distance=+$("editDistance").value||0;persist()});
 $("savePrioritiesInline")?.addEventListener("click",()=>{state.priorities=[$("editPriority1").value.trim(),$("editPriority2").value.trim()].filter(Boolean);persist()});
-$("addCandidateInline")?.addEventListener("click",()=>{state.candidates.push({name:$("newCandidateName").value.trim(),year:$("newCandidateYear").value.trim(),km:$("newCandidateKm").value.trim(),price:$("newCandidatePrice").value.trim(),note:$("newCandidateNote").value.trim(),status:$("newCandidateStatus").value});persist()});
+let pendingCandidatePhoto="";
+$("newCandidatePhoto")?.addEventListener("change",async e=>{
+  const file=e.target.files?.[0];
+  if(!file)return;
+  try{
+    pendingCandidatePhoto=await compressAdminImage(file,760,.68);
+    const preview=$("newCandidatePhotoPreview");
+    if(preview){
+      preview.innerHTML=`<img src="${pendingCandidatePhoto}" alt="Náhled fotografie vanu">`;
+      preview.classList.remove("hidden");
+    }
+  }catch{
+    alert("Fotku se nepodařilo načíst.");
+  }
+});
+$("addCandidateInline")?.addEventListener("click",()=>{
+  state.candidates.push({
+    name:$("newCandidateName").value.trim(),
+    year:$("newCandidateYear").value.trim(),
+    km:$("newCandidateKm").value.trim(),
+    price:$("newCandidatePrice").value.trim(),
+    note:$("newCandidateNote").value.trim(),
+    status:$("newCandidateStatus").value,
+    photo:pendingCandidatePhoto
+  });
+  pendingCandidatePhoto="";
+  if($("newCandidatePhoto")) $("newCandidatePhoto").value="";
+  $("newCandidatePhotoPreview")?.classList.add("hidden");
+  persist();
+});
 $("addLessonInline")?.addEventListener("click",()=>{const x=$("newLesson").value.trim();if(x){state.lessons.push(x);$("newLesson").value="";persist()}});
 $("saveStageInline")?.addEventListener("click",()=>{const next={van:$("toggleVan").checked,build:$("toggleBuild").checked,home:$("toggleHome").checked,road:$("toggleRoad").checked};["van","build","home","road"].forEach(k=>{if(next[k]&&!state.unlocks[k]){state.revealed[k]=false;if(!state.revealQueue.includes(k))state.revealQueue.push(k)}if(!next[k]){state.revealed[k]=false;state.revealQueue=state.revealQueue.filter(x=>x!==k)}});state.unlocks=next;persist()});
 
