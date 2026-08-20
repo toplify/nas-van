@@ -169,7 +169,15 @@ $("sendNotifyTinkaBtn")?.addEventListener("click",async()=>{
     });
     const data=await response.json().catch(()=>({}));
     if(!response.ok || !data.ok){
-      if(response.status===401) sessionStorage.removeItem("zeroKmPushAdminSecret");
+      if(response.status===401){
+        sessionStorage.removeItem("zeroKmPushAdminSecret");
+        if(data.diagnostic){
+          const d=data.diagnostic;
+          throw new Error(
+            `Neplatný push klíč. Netlify: délka ${d.expectedLength}, otisk ${d.expectedFingerprint||"—"} · zadaný: délka ${d.providedLength}, otisk ${d.providedFingerprint||"—"}`
+          );
+        }
+      }
       throw new Error(data.error||"Odeslání selhalo.");
     }
     notifyStatus.textContent=`✓ Upozornění odesláno (${data.sent} zařízení).`;

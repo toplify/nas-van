@@ -1,0 +1,14 @@
+V17.13 – diagnostika PUSH_ADMIN_SECRET
+
+Po deployi:
+1. Otevři TOMÍK → Upozornit Tínku.
+2. Odešli zprávu.
+3. Pokud klíč nesedí, stránka zobrazí:
+   - délku secretu v Netlify
+   - délku tebou zadaného secretu
+   - krátký SHA-256 otisk obou hodnot
+
+Tyto údaje NEODHALUJÍ samotný secret a lze je bezpečně porovnat.
+
+Pokud délky nebo otisky nesedí, hodnoty nejsou stejné.
+V Netlify ani při zadávání nepoužívej uvozovky. Funkce nyní automaticky odstraní mezery a odřádkování na začátku a konci.

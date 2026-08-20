@@ -1,6 +1,7 @@
 
 import { getStore } from "@netlify/blobs";
 import webpush from "web-push";
+import { createHash } from "node:crypto";
 
 export default async (req) => {
   if (req.method !== "POST") {
@@ -10,12 +11,36 @@ export default async (req) => {
   try {
     const { text, secret } = await req.json();
 
-    if (!process.env.PUSH_ADMIN_SECRET || secret !== process.env.PUSH_ADMIN_SECRET) {
-      return Response.json({ ok:false, error:"Neplatný push klíč." }, { status:401 });
+    const expectedSecret = String(process.env.PUSH_ADMIN_SECRET || "").trim();
+    const providedSecret = String(secret || "").trim();
+    const fingerprint = value => createHash("sha256").update(value).digest("hex").slice(0,8);
+
+    if (!expectedSecret || providedSecret !== expectedSecret) {
+      console.log("PUSH AUTH FAILED", {
+        expectedConfigured: !!expectedSecret,
+        expectedLength: expectedSecret.length,
+        providedLength: providedSecret.length,
+        expectedFingerprint: expectedSecret ? fingerprint(expectedSecret) : null,
+        providedFingerprint: providedSecret ? fingerprint(providedSecret) : null
+      });
+
+      return Response.json({
+        ok:false,
+        error:"Neplatný push klíč.",
+        diagnostic:{
+          expectedConfigured:!!expectedSecret,
+          expectedLength:expectedSecret.length,
+          providedLength:providedSecret.length,
+          expectedFingerprint:expectedSecret ? fingerprint(expectedSecret) : null,
+          providedFingerprint:providedSecret ? fingerprint(providedSecret) : null
+        }
+      }, { status:401 });
     }
     if (!text?.trim()) {
       return Response.json({ ok:false, error:"Chybí text upozornění." }, { status:400 });
     }
+
+    console.log("PUSH AUTH OK", { providedLength: providedSecret.length });
 
     const publicKey = process.env.VAPID_PUBLIC_KEY;
     const privateKey = process.env.VAPID_PRIVATE_KEY;
