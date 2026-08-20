@@ -1,7 +1,7 @@
 {
   "id": "/",
-  "name": "0 KM — Náš van",
-  "short_name": "0 KM",
+  "name": "Van Tínky a Tomíka",
+  "short_name": "Náš van",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#f5eddf",
@@ -10,12 +10,14 @@
     {
       "src": "/icons/icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "/icons/icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     }
   ]
 }
