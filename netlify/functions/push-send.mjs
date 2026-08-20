@@ -61,7 +61,7 @@ export default async (req) => {
     }
 
     const payload = JSON.stringify({
-      title:"VanLife 🚐 Tínky a Tomíka",
+      title:"⁣",
       body:text.trim(),
       url:"https://nas-van.netlify.app/"
     });

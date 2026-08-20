@@ -80,7 +80,7 @@ $("clearVanPhotoAdmin")?.addEventListener("click",()=>{
 
 $("fullResetBtn")?.addEventListener("click",()=>{
   const first = confirm(
-    "Opravdu chceš resetovat celý projekt 0 KM?\n\n" +
+    "Opravdu chceš resetovat celý projekt VanLife Tínky a Tomíka?\n\n" +
     "Smaže se fond, den, kilometry, priority, kandidáti, lekce, jméno a fotografie vanu a všechny kapitoly se znovu zamknou."
   );
   if(!first) return;

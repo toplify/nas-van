@@ -46,7 +46,7 @@ function save(){
     localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
     return true;
   }catch(err){
-    console.error("0 KM save failed",err);
+    console.error("VanLife Tínky a Tomíka save failed",err);
     alert("Tuhle změnu se nepodařilo uložit. Zkus menší obrázek.");
     return false;
   }
@@ -110,7 +110,7 @@ function render(){
  const journeyVanTitle=$("journeyVan")?.querySelector("b");
  if(journeyVanTitle) journeyVanTitle.textContent=state.vanName?.trim() || "Náš van";
 }
-const chapters={van:["🚐","MÁME VAN.","Některé sny přestanou být sny úplně nenápadně."],build:["🛠","JDEME STAVĚT.","Prázdný prostor. Spousta nápadů. A poprvé už nejde jen o sen."],home:["🪴","JE TO NÁŠ DOMOV.","Už to není jen auto. Je to malé místo na světě, které patří nám."],road:["🗺","0 KM.","Všechno předtím byla příprava. Teď začíná skutečná cesta."]};
+const chapters={van:["🚐","MÁME VAN.","Některé sny přestanou být sny úplně nenápadně."],build:["🛠","JDEME STAVĚT.","Prázdný prostor. Spousta nápadů. A poprvé už nejde jen o sen."],home:["🪴","JE TO NÁŠ DOMOV.","Už to není jen auto. Je to malé místo na světě, které patří nám."],road:["🗺","VanLife Tínky a Tomíka.","Všechno předtím byla příprava. Teď začíná skutečná cesta."]};
 function showReveal(k){
   if(!$("unlockModal")||!chapters[k]) return;
   pendingReveal=k;
@@ -526,10 +526,10 @@ function renderRoadTrip(){
  const logs=t.journal.length?t.journal.slice().reverse().map(x=>`<div class="road-log"><div><b>${esc(String(x.km))} KM</b><small>${esc(x.title)}</small></div><p>${esc(x.text)}</p></div>`).join(""):`<div class="road-log-empty">Zatím je před námi celých 600 km. První zápis se tu objeví, až se nám něco stane.</div>`;
  return `<div class="road-trip">
  <div class="road-mission"><span>NAŠE PRVNÍ MISE</span><h3>Zkušební cesta</h3><p>Než jednou opravdu vyrazíme, čeká nás první zkouška. <b>600 kilometrů. Jeden víkend. My dva a náš van.</b> Všechno, co se nám cestou stane, zůstane tady.</p><div class="road-mission-tags"><b>🚐 jeden víkend</b><b>🛣️ minimálně 600 km</b><b>🏕️ alespoň 2 místa na spaní</b></div></div>
- <div class="road-dashboard"><div class="road-km-head"><div><small>NAŠE ZKUŠEBNÍ JÍZDA</small><strong>${km} <i>/ 600 KM</i></strong></div><div><small>DEN</small><strong>${t.day||1}</strong></div></div><div class="road-track"><i style="width:${pct}%"></i><span class="road-van" style="left:calc(${pct}% - 18px)">🚐</span></div><div class="road-track-labels"><span>0 KM</span><span>${left?`${left} km před námi`:"600 KM ✓"}</span></div>${t.location?`<div class="road-location">📍 <span>Právě jsme:</span> <b>${esc(t.location)}</b></div>`:""}</div>
+ <div class="road-dashboard"><div class="road-km-head"><div><small>NAŠE ZKUŠEBNÍ JÍZDA</small><strong>${km} <i>/ 60VanLife Tínky a Tomíka</i></strong></div><div><small>DEN</small><strong>${t.day||1}</strong></div></div><div class="road-track"><i style="width:${pct}%"></i><span class="road-van" style="left:calc(${pct}% - 18px)">🚐</span></div><div class="road-track-labels"><span>VanLife Tínky a Tomíka</span><span>${left?`${left} km před námi`:"60VanLife Tínky a Tomíka ✓"}</span></div>${t.location?`<div class="road-location">📍 <span>Právě jsme:</span> <b>${esc(t.location)}</b></div>`:""}</div>
  <div class="road-section-head"><span>NÁŠ DENÍK CESTY</span><p>Co jsme cestou zažili, jak jsme se rozhodli a co z toho vzniklo.</p></div><div class="road-journal">${logs}</div>
  <div class="road-souvenir-locked"><div class="road-souvenir-icon">🎁</div><div><small>SUVENÝR Z PRVNÍ CESTY</small><b>Zatím čeká někde po cestě…</b><p>Během naší výpravy dostaneme možnost jeden si vybrat. Až ho získáme, zůstane tady v našem deníku.</p></div></div>
- ${km>=600?`<div class="road-600"><div>✦ 600 KM ✓ ✦</div><h3>Naše první zkouška je za námi.</h3><p>Dojeli jsme až sem. Teď už zbývá zjistit, jestli pořád chceme vyrazit mnohem dál.</p></div>`:""}</div>`;
+ ${km>=600?`<div class="road-600"><div>✦ 60VanLife Tínky a Tomíka ✓ ✦</div><h3>Naše první zkouška je za námi.</h3><p>Dojeli jsme až sem. Teď už zbývá zjistit, jestli pořád chceme vyrazit mnohem dál.</p></div>`:""}</div>`;
 }
 function wireRoadTrip(){}
 function wireVanNameControls(){
@@ -640,7 +640,7 @@ async function initPushOptIn(){
       const isiOS=/iPad|iPhone|iPod/.test(navigator.userAgent);
 
       if(isiOS && !standalone){
-        copy.textContent="Na iPhonu nejdřív otevři Sdílet → Přidat na plochu. Pak spusť 0 KM z ikonky a vrať se sem.";
+        copy.textContent="Na iPhonu nejdřív otevři Sdílet → Přidat na plochu. Pak spusť VanLife Tínky a Tomíka z ikonky a vrať se sem.";
         btn.textContent="Nejdřív přidat na plochu";
         btn.disabled=false;
         return;
@@ -671,13 +671,13 @@ async function initPushOptIn(){
       if(!res.ok || !data.ok) throw new Error(data.error||"Subscription failed");
 
       panel.classList.add("success");
-      copy.textContent="Hotovo. Když Tomík zazvoní, upozornění může přijít i se zavřeným 0 KM. ♡";
+      copy.textContent="Hotovo. Když Tomík zazvoní, upozornění může přijít i se zavřeným VanLife Tínky a Tomíka. ♡";
       btn.textContent="✓ Upozornění zapnuta";
       if("setAppBadge" in navigator) try{await navigator.clearAppBadge()}catch{}
       setTimeout(()=>panel.classList.add("hidden"),2600);
     }catch(err){
       console.error(err);
-      copy.textContent="Upozornění se nepodařilo zapnout. Zkontroluj, že je 0 KM přidané na plochu a zkus to znovu.";
+      copy.textContent="Upozornění se nepodařilo zapnout. Zkontroluj, že je VanLife Tínky a Tomíka přidané na plochu a zkus to znovu.";
       btn.disabled=false;
     }
   });
