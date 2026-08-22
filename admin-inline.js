@@ -239,3 +239,27 @@ $("sendNotifyTinkaBtn")?.addEventListener("click",async()=>{
 });
 
 render();
+
+
+function fmtNotifyTime(v){
+  if(!v)return "—";
+  try{return new Intl.DateTimeFormat("cs-CZ",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit",second:"2-digit"}).format(new Date(v))}
+  catch{return v}
+}
+async function loadNotifyHistory(){
+  const box=$("notifyHistory"); if(!box)return;
+  try{
+    const r=await fetch("/.netlify/functions/push-status",{cache:"no-store"});
+    const d=await r.json();
+    const n=d.latest;
+    if(!n){box.innerHTML='<span class="muted">Zatím žádné upozornění.</span>';return}
+    const status=n.confirmedAt?"✓ Přečteno":n.openedAt?"👁 Otevřeno":"○ Odesláno";
+    box.innerHTML=`<div class="notify-history-message">${esc(n.text||"")}</div>
+      <div class="notify-history-status"><b>${status}</b></div>
+      <div class="notify-history-times">Odesláno: ${fmtNotifyTime(n.sentAt)}<br>Otevřeno: ${fmtNotifyTime(n.openedAt)}<br>Přečteno: ${fmtNotifyTime(n.confirmedAt)}</div>`;
+  }catch{box.innerHTML='<span class="muted">Stav se nepodařilo načíst.</span>'}
+}
+$("refreshNotifyHistory")?.addEventListener("click",loadNotifyHistory);
+$("notifyTinkaBtn")?.addEventListener("click",loadNotifyHistory);
+loadNotifyHistory();
+setInterval(()=>{if(!document.hidden)loadNotifyHistory()},15000);

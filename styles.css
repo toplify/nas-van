@@ -2093,3 +2093,23 @@ img{
   display:block;
   border-radius:inherit;
 }
+
+.vanlife-notice-modal{position:fixed;inset:0;z-index:280;display:grid;place-items:center;padding:14px;background:rgba(65,49,37,.78)}
+.vanlife-notice-modal.hidden{display:none!important}
+.vanlife-notice-card{width:min(480px,100%);max-height:86dvh;overflow:auto;padding:24px 20px 20px;text-align:center;border:1px solid #ddc5a4;border-radius:23px;background:#fff8eb;color:#5b4230;box-shadow:0 22px 60px rgba(55,38,24,.28)}
+.vanlife-notice-bell{font-size:33px}
+.vanlife-notice-kicker{font-size:7px;font-weight:900;letter-spacing:.18em;color:#a27d59}
+.vanlife-notice-card h2{margin:5px 0 13px;font-family:Georgia,serif;font-size:25px;color:#5c422f}
+.vanlife-notice-text{padding:15px;text-align:left;white-space:pre-wrap;overflow-wrap:anywhere;border:1px solid #e1ceb2;border-radius:14px;background:#fffdf8;font-family:Georgia,serif;font-size:14px;line-height:1.58;color:#674b36}
+.vanlife-notice-card button{width:100%;min-height:47px;margin-top:14px;border:1px solid #aa794d;border-radius:12px;background:#bd9161;color:#fff;font-weight:900}
+.notify-custom-label textarea{min-height:135px!important}
+@media(max-width:700px){.vanlife-notice-card{padding:21px 14px 15px}.vanlife-notice-card h2{font-size:22px}.vanlife-notice-text{font-size:13px}}
+
+/* V17.20 — notification receipt status */
+.notify-history-wrap{margin-top:10px;padding:10px;border:1px solid #dfc9aa;border-radius:12px;background:#fffaf1;color:#674c37}
+.notify-history-head{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:10px}
+.notify-history-head button{padding:5px 8px;border:1px solid #c7a47d;border-radius:8px;background:#fff;color:#76583f;font-size:9px}
+.notify-history{margin-top:8px;font-size:9px;line-height:1.45}
+.notify-history-message{padding:8px;border-radius:8px;background:#fff;white-space:pre-wrap;max-height:90px;overflow:auto}
+.notify-history-status{margin-top:7px;font-size:11px}
+.notify-history-times{margin-top:4px;color:#8b725d}

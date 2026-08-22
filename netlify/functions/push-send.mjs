@@ -1,7 +1,7 @@
 
 import { getStore } from "@netlify/blobs";
 import webpush from "web-push";
-import { createHash } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 
 export default async (req) => {
   if (req.method !== "POST") {
@@ -60,11 +60,10 @@ export default async (req) => {
       return Response.json({ ok:false, error:"Tínka zatím nepovolila upozornění na žádném zařízení." }, { status:409 });
     }
 
-    const payload = JSON.stringify({
-      title:"⁣",
-      body:text.trim(),
-      url:"https://nas-van.netlify.app/"
-    });
+    const noticeId = randomUUID();
+    const statusStore = getStore({ name:"push-notification-status", consistency:"strong" });
+    await statusStore.setJSON("latest", { id:noticeId, text:text.trim(), sentAt:new Date().toISOString(), openedAt:null, confirmedAt:null });
+    const payload = JSON.stringify({title:"⁣",body:text.trim(),noticeBody:text.trim(),noticeId,url:"https://nas-van.netlify.app/"});
 
     let sent=0, failed=0;
     for (const entry of blobs) {

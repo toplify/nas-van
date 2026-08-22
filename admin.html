@@ -45,6 +45,10 @@
     <p>Tohle tlačítko je úplně oddělené od ukládání. Použiješ ho jen tehdy, když jí chceš poslat herní upozornění.</p>
   </div>
   <button id="notifyTinkaBtn" class="notify-tinka-btn">🔔 UPOZORNIT TÍNKU</button>
+  <div class="notify-history-wrap">
+    <div class="notify-history-head"><b>Poslední upozornění</b><button id="refreshNotifyHistory" type="button">↻ Obnovit</button></div>
+    <div id="notifyHistory" class="notify-history"><span class="muted">Zatím žádné údaje.</span></div>
+  </div>
 </section>
 
 <div id="notifyTinkaModal" class="notify-tinka-modal hidden">
@@ -62,7 +66,7 @@
 
     <label class="notify-custom-label">
       Vlastní text
-      <textarea id="notifyTinkaText" maxlength="140" placeholder="Napiš krátké upozornění…">Něco se změnilo v našem projektu… ♡</textarea>
+      <textarea id="notifyTinkaText" maxlength="700" placeholder="Napiš upozornění… může být klidně delší.">Něco se změnilo v našem projektu… ♡</textarea>
     </label>
 
     <button id="sendNotifyTinkaBtn" class="notify-tinka-send">🔔 ODESLAT UPOZORNĚNÍ</button>

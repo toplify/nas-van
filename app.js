@@ -684,4 +684,41 @@ async function initPushOptIn(){
 }
 
 initPushOptIn();
+
+function showVanlifeNoticeFromUrl(){
+  const params=new URLSearchParams(window.location.search);
+  const message=params.get("vanlife_notice");
+  const noticeId=params.get("vanlife_notice_id")||"";
+  if(!message)return;
+  if(noticeId){
+    sessionStorage.setItem("vanlifeCurrentNoticeId",noticeId);
+    fetch("/.netlify/functions/push-status",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:noticeId,status:"opened"})}).catch(()=>{});
+  }
+  const modal=$("vanlifeNoticeModal"), text=$("vanlifeNoticeText");
+  if(!modal||!text)return;
+  text.textContent=message;
+  modal.classList.remove("hidden");
+  document.body.classList.add("modal-open");
+  params.delete("vanlife_notice");
+  params.delete("vanlife_notice_id");
+  const clean=window.location.pathname+(params.toString()?`?${params.toString()}`:"")+window.location.hash;
+  history.replaceState({},document.title,clean);
+}
+$("closeVanlifeNotice")?.addEventListener("click",()=>{
+  const id=sessionStorage.getItem("vanlifeCurrentNoticeId")||"";
+  if(id){
+    fetch("/.netlify/functions/push-status",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id,status:"confirmed"})}).catch(()=>{});
+    sessionStorage.removeItem("vanlifeCurrentNoticeId");
+  }
+  $("vanlifeNoticeModal")?.classList.add("hidden");
+  document.body.classList.remove("modal-open");
+});
+$("vanlifeNoticeModal")?.addEventListener("click",e=>{
+  if(e.target===$("vanlifeNoticeModal")){
+    $("vanlifeNoticeModal").classList.add("hidden");
+    document.body.classList.remove("modal-open");
+  }
+});
+
 render();
+showVanlifeNoticeFromUrl();
